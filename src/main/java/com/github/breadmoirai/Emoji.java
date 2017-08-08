@@ -1364,9 +1364,10 @@ public enum Emoji {
     }
 
     /**
-     * this doesn't really work that well.
-     * @param name
-     * @return
+     * This doesn't really work that well. Alternate names are not supported at this time.
+     * <p>This method relies on the {@link com.github.breadmoirai.Emoji#valueOf} method with a small amount of prepossessing to ignore case and correct formatting. The {@link java.lang.IllegalArgumentException} normally thrown by {@link java.lang.Enum#valueOf Enum#valueOf(String)} is caught within this method and null is returned.
+     * @param name the name of the emoji.
+     * @return the emoji if found
      */
     public static Emoji getByName(String name) {
         switch (name.charAt(0)) {
@@ -1374,7 +1375,12 @@ public enum Emoji {
             case '1':
                 name = "_" + name;
         }
-        return Emoji.valueOf(name.toUpperCase());
+        name = name.replace(' ', '_');
+        try {
+            return Emoji.valueOf(name.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
     }
 
     /**
